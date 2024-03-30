@@ -1,7 +1,7 @@
 import { HttpError } from "http-errors";
 import { v4 as uuidv4 } from "uuid";
 import { NextFunction, Request, Response } from "express";
-import logger from "../../config/logger";
+import logger from "../../../config/logger";
 
 export const globalErrorHandler = (
     err: HttpError,
@@ -25,16 +25,20 @@ export const globalErrorHandler = (
         method: req.method,
     });
 
-    res.status(statusCode).json({
-        errors: [
-            {
-                ref: errorId,
-                type: err.name,
-                msg: message,
-                path: req.path,
-                location: "server",
-                stack: isProduction ? null : err.stack,
-            },
-        ],
-    });
+    if (err) {
+        res.status(statusCode).json({
+            errors: [
+                {
+                    ref: errorId,
+                    type: err.name,
+                    msg: message,
+                    path: req.path,
+                    location: "server",
+                    stack: isProduction ? null : err.stack,
+                },
+            ],
+        });
+    } else {
+        next();
+    }
 };

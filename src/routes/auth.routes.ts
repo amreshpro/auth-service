@@ -4,6 +4,8 @@ import AuthController from "../controller/auth.controller";
 
 const authRouter = express.Router();
 
-authRouter.post("/register",async(req,res)=>AuthController.Register(req,res));
+authRouter.post("/register", async (req, res) =>
+    AuthController.Register(req, res),
+);
 
 export default authRouter;

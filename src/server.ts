@@ -1,5 +1,5 @@
 import app from "./app";
-import logger from "./config/logger";
+import logger from "../config/logger";
 
 const startServer = () => {
     const PORT = process.env.PORT || 5500;
