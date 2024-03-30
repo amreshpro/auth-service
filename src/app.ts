@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import express, { Request, Response } from "express";
 import { globalErrorHandler } from "./common/middlewares/globalErrorHandler";
 import authRouter from "./routes/auth.routes";
@@ -11,6 +12,6 @@ app.get("/", (req: Request, res: Response) => {
 //middleware
 app.use(express.json());
 app.use(globalErrorHandler);
-app.use("/auth",authRouter);
+app.use("/auth", authRouter);
 
 export default app;
