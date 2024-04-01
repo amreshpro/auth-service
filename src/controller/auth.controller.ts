@@ -24,7 +24,7 @@ class AuthController {
                 });
 
                 // eslint-disable-next-line no-console
-                console.log(prismaResponse);
+                console.log("prismaresponse", prismaResponse);
                 if (prismaResponse) {
                     return res
                         .status(201)
@@ -36,6 +36,9 @@ class AuthController {
             });
         } catch (error) {
             logger.error(error);
+            return res.status(500).json({
+                error,
+            });
         }
     }
 
