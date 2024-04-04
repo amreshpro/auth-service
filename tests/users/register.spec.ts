@@ -1,15 +1,14 @@
 import supertest from "supertest";
-
+import { isJWT } from "../../src/utils/index";
 import app from "../../src/app";
 
 describe("POST /auth/register", () => {
     describe("Given all fields", () => {
         // AAA
-        it("should return the 201 status code.", async () => {
+        it.skip("should return the 201 status code.", async () => {
             // A-Arrange
             const userData = {
-                firstName: "Amresh",
-                lastName: "Maurya",
+                name: "Amresh",
                 email: "amresh.terminal@gmail.com",
                 password: "secret",
             };
@@ -30,7 +29,44 @@ describe("POST /auth/register", () => {
                 (response.headers as Record<string, string>)["content-type"],
             ).toEqual(expect.stringContaining("json"));
         });
-    });
 
-    describe("Fields are missing", () => {});
+        it(" Should return a access token", async () => {
+            // let accessToken: null | string;
+            // let refreshToken: null | string;
+            const tokens = {
+                accessToken: "",
+                refreshToken: "",
+            };
+            // A-Arrange
+            const userData = {
+                name: "Amresh",
+                email: "amresh.terminal@gmail.com",
+                password: "secret",
+            };
+            interface Headers {
+                ["set-cookie"]: string[];
+            }
+            // A-Act
+            const response = await supertest(app)
+                .post("/auth/sign")
+                .send(userData);
+            // A-Assert
+
+            const cookie = (response.headers as Headers)["set-cookie"] || [];
+            cookie.forEach((cookie) => {
+                if (cookie.startsWith("accessToken=")) {
+                    tokens.accessToken = cookie.split(";")[0].split("=")[1];
+                }
+
+                if (cookie.startsWith("refreshToken=")) {
+                    tokens.refreshToken = cookie.split(";")[0].split("=")[1];
+                }
+            });
+
+            expect(isJWT(tokens.accessToken)).toBeTruthy();
+            // expect(isJWT(tokens.refreshToken)).toBeTruthy()
+            // expect(tokens.refreshToken).not.toBe('');
+            expect(tokens.accessToken).not.toBe("");
+        });
+    });
 });

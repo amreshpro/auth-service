@@ -1,5 +1,6 @@
 # Logs
 logs
+certs/
 *.log
 bun.lockb
 npm-debug.log*
