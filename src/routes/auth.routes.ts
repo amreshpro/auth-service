@@ -7,6 +7,9 @@ const authRouter = express.Router();
 authRouter.post("/register", async (req, res) =>
     AuthController.Register(req, res),
 );
+authRouter.post("/sign", async (req, res, next) =>
+    AuthController.SignIn(req, res, next),
+);
 authRouter.get("/users", async (req, res) => AuthController.AllUser(req, res));
 authRouter.post("/users", async (req, res) =>
     AuthController.getUserByEmail(req, res),
