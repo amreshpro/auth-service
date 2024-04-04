@@ -74,6 +74,21 @@ class AuthController {
                     // publicKey = fs.readFileSync(
                     //     path.join(__dirname, "../../certs/public.pem"),
                     // );
+                    res.cookie("accessToken", tokens.accessToken, {
+                        domain: "localhost",
+                        sameSite: "strict",
+                        maxAge: 1000 * 60 * 60, // 1h
+                        httpOnly: true, // Very important
+                    });
+
+                    // res.cookie("refreshToken", refreshToken, {
+                    //     domain: "localhost",
+                    //     sameSite: "strict",
+                    //     maxAge: 1000 * 60 * 60 * 24 * 365, // 1y
+                    //     httpOnly: true, // Very important
+                    // });
+
+                    res.status(201);
                 } catch (err) {
                     const error = createHttpError(
                         500,
@@ -107,9 +122,7 @@ class AuthController {
                         maxAge: 1000 * 60 * 60 * 24 * 365, // 365 dasy
                     });
 
-                    return res
-                        .status(201)
-                        .json({ msg: "Data saved successfully" });
+                    return res.status(201).json({ msg: "SignIn successfully" });
                 }
             }
 
