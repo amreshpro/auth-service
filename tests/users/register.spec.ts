@@ -82,6 +82,8 @@ describe("POST /auth/register", () => {
                 expect(isJWT(tokens.accessToken)).toBeTruthy();
                 // expect(isJWT(tokens.refreshToken)).toBeTruthy()
                 // expect(tokens.refreshToken).not.toBe('');
+                console.log(tokens.accessToken);
+
                 expect(tokens.accessToken).not.toBe("");
             } catch (err) {
                 const error = createHttpError(

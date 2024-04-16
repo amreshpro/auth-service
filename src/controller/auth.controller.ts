@@ -58,7 +58,8 @@ class AuthController {
                 const user = await prisma.user.findUnique({
                     where: email,
                 });
-
+                // eslint-disable-next-line no-console
+                console.log(user);
                 const payload: JwtPayload = {
                     sub: String(user?.id),
                     role: "USER",
@@ -87,6 +88,9 @@ class AuthController {
                     //     maxAge: 1000 * 60 * 60 * 24 * 365, // 1y
                     //     httpOnly: true, // Very important
                     // });
+
+                    // eslint-disable-next-line no-console
+                    console.log(tokens.accessToken);
 
                     res.status(201);
                 } catch (err) {
@@ -122,21 +126,20 @@ class AuthController {
                         maxAge: 1000 * 60 * 60 * 24 * 365, // 365 dasy
                     });
 
-                    return res.status(201).json({ msg: "SignIn successfully" });
+                    res.status(201).json({ msg: "SignIn successfully" });
+                    next();
                 }
             }
 
             return res.status(500).json({
                 error: "Email is registered in our Database",
             });
-        } catch (error) {
-            logger.error(error);
-            return res.status(500).json({
-                error,
-            });
+        } catch (err) {
+            logger.error(err);
+            createHttpError(500, "Error while sigin");
+            return;
         }
     }
-
     static async AllUser(req: Request, res: Response) {
         const Users = await prisma.user.findMany({});
         if (Users) {
